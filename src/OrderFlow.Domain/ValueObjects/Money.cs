@@ -11,7 +11,7 @@ public sealed class Money : ValueObject
         if (value < 0)
             throw new ArgumentException("Price cannot be negative.");
 
-        Value = Math.Round(value, 4);
+        Value = Math.Round(value, 2);
     }
 
     public static Money Create(decimal value)
