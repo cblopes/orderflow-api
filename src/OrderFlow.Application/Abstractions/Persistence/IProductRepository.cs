@@ -5,4 +5,5 @@ namespace OrderFlow.Application.Abstractions.Persistence;
 public interface IProductRepository
 {
     Task CreateAsync(Product product);
+    Task<Product?> GetById(Guid id);
 }
