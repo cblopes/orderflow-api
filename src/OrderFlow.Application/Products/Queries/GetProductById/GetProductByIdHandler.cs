@@ -7,7 +7,7 @@ public class GetProductByIdHandler(IProductRepository repository)
 {
     public async Task<Result<ProductDto>> HandleAsync(GetProductByIdQuery query)
     {
-        var product = await repository.GetById(query.Id);
+        var product = await repository.GetByIdAsync(query.Id);
 
         if (product is null)
             return Result<ProductDto>.Failure("Product not found.");
