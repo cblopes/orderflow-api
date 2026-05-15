@@ -30,9 +30,23 @@ public class Product : Entity
         SetUpdated();
     }
 
-    public void Activate() => IsAvailable = true;
+    public void Activate()
+    {
+        if (IsAvailable)
+            throw new InvalidOperationException("Product is already active.");
 
-    public void Deactivate() => IsAvailable = false;
+        IsAvailable = true;
+        SetUpdated();
+    }
+
+    public void Deactivate()
+    {
+        if (!IsAvailable)
+            throw new InvalidOperationException("Product is already inactive.");
+
+        IsAvailable = false;
+        SetUpdated();
+    }
 
     private void SetName(string name)
     {

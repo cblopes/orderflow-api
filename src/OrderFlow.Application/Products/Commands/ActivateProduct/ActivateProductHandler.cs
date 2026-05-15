@@ -11,10 +11,14 @@ public class ActivateProductHandler(IProductRepository repository)
         if (product is null)
             return Result.Failure("Product not found.");
 
-        if (product.IsAvailable)
-            return Result.Failure("Product is already active.");
-
-        product.Activate();
+        try
+        {
+            product.Activate();
+        }
+        catch (InvalidOperationException ex)
+        {
+            return Result.Failure(ex.Message);
+        }
 
         await repository.SaveChangesAsync();
 

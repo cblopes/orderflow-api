@@ -11,10 +11,14 @@ public class DeactivateProductHandler(IProductRepository repository)
         if (product is null)
             return Result.Failure("Product not found.");
 
-        if (!product.IsAvailable)
-            return Result.Failure("Product is already inactive.");
-
-        product.Deactivate();
+        try
+        {
+            product.Deactivate();
+        }
+        catch (InvalidOperationException ex)
+        {
+            return Result.Failure(ex.Message);
+        }
 
         await repository.SaveChangesAsync();
 

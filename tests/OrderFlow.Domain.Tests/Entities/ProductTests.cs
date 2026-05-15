@@ -55,6 +55,18 @@ public class ProductTests
     }
 
     [Fact]
+    public void Should_Throw_When_Deactivating_An_Inactive_Product()
+    {
+        var product = new Product("Marmita", 15);
+
+        product.Deactivate();
+
+        Action act = () => product.Deactivate();
+
+        act.Should().Throw<InvalidOperationException>();
+    }
+
+    [Fact]
     public void Should_Activate_Product()
     {
         var product = new Product("Marmita", 5);
@@ -63,6 +75,16 @@ public class ProductTests
         product.Activate();
 
         product.IsAvailable.Should().BeTrue();
+    }
+
+    [Fact]
+    public void Should_Throw_When_Activating_Already_Activated_Product()
+    {
+        var product = new Product("Marmita", 5);
+
+        Action act = () => product.Activate();
+
+        act.Should().Throw<InvalidOperationException>();
     }
 
     [Fact]
