@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using OrderFlow.Application.Products.Commands.ActivateProduct;
 using OrderFlow.Application.Products.Commands.CreateProduct;
 using OrderFlow.Application.Products.Commands.DeactivateProduct;
 using OrderFlow.Application.Products.Commands.UpdateProduct;
@@ -63,6 +64,20 @@ public class ProductsController() : ControllerBase
         [FromBody] UpdateProductCommand command)
     {
         command.Id = id;
+        var result = await handler.HandleAsync(command);
+
+        if (!result.IsSuccess)
+            return BadRequest(result.Error);
+
+        return NoContent();
+    }
+
+    [HttpPatch("{id:guid}/activate")]
+    public async Task<IActionResult> Activate(
+        [FromServices] ActivateProductHandler handler,
+        [FromRoute] Guid id)
+    {
+        var command = new ActivateProductCommand(id);
         var result = await handler.HandleAsync(command);
 
         if (!result.IsSuccess)
