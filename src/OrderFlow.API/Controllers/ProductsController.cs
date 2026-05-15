@@ -32,7 +32,11 @@ public class ProductsController() : ControllerBase
     {
         var query = new GetProductsQuery(isAvailable);
 
-        return Ok(await handler.HandleAsync(query));
+        var result = await handler.HandleAsync(query);
+        if (!result.IsSuccess)
+            return BadRequest(result.Error);
+
+        return Ok(result.Value);
     }
 
     [HttpGet("{id:guid}")]
