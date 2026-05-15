@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using OrderFlow.Application.Products.Commands.CreateProduct;
 using OrderFlow.Application.Products.Queries.GetProductById;
+using OrderFlow.Application.Products.Queries.GetProducts;
 
 namespace OrderFlow.API.Controllers;
 
@@ -22,6 +23,16 @@ public class ProductsController() : ControllerBase
             nameof(GetById),
             new { id = result.Value },
             result.Value);
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> Get(
+        [FromServices] GetProductsHandler handler,
+        [FromQuery] bool? isAvailable)
+    {
+        var query = new GetProductsQuery(isAvailable);
+
+        return Ok(await handler.HandleAsync(query));
     }
 
     [HttpGet("{id:guid}")]

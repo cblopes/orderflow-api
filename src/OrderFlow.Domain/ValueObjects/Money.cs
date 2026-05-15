@@ -25,4 +25,8 @@ public sealed class Money : ValueObject
 
     public static Money operator *(Money a, int quantity)
         => new(a.Value * quantity);
+
+    public static implicit operator decimal(Money money) => money.Value;
+
+    public static explicit operator Money(decimal value) => Create(value);
 }
