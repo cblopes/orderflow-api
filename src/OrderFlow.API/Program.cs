@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using OrderFlow.Application.Abstractions.Persistence;
 using OrderFlow.Application.Products.Commands.CreateProduct;
+using OrderFlow.Application.Products.Commands.DeactivateProduct;
 using OrderFlow.Application.Products.Commands.UpdateProduct;
 using OrderFlow.Application.Products.Queries.GetProductById;
 using OrderFlow.Application.Products.Queries.GetProducts;
@@ -23,6 +24,7 @@ builder.Services.AddScoped<CreateProductHandler>();
 builder.Services.AddScoped<UpdateProductHandler>();
 builder.Services.AddScoped<GetProductsHandler>();
 builder.Services.AddScoped<GetProductByIdHandler>();
+builder.Services.AddScoped<DeactivateProductHandler>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 
 var app = builder.Build();
