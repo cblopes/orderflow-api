@@ -16,6 +16,7 @@ public class GetProductByIdHandler(IProductRepository repository)
             product.Id,
             product.Name,
             product.Description,
+            product.Price,
             product.ImageUrl,
             product.IsAvailable
         );
