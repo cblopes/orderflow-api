@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using OrderFlow.Application.Products.Commands.CreateProduct;
+using OrderFlow.Application.Products.Commands.UpdateProduct;
 using OrderFlow.Application.Products.Queries.GetProductById;
 using OrderFlow.Application.Products.Queries.GetProducts;
 
@@ -52,5 +53,20 @@ public class ProductsController() : ControllerBase
             return NotFound(result.Error);
 
         return Ok(result.Value);
+    }
+
+    [HttpPut("{id:guid}")]
+    public async Task<IActionResult> Update(
+        [FromServices] UpdateProductHandler handler,
+        [FromRoute] Guid id,
+        [FromBody] UpdateProductCommand command)
+    {
+        command.Id = id;
+        var result = await handler.HandleAsync(command);
+
+        if (!result.IsSuccess)
+            return BadRequest(result.Error);
+
+        return NoContent();
     }
 }

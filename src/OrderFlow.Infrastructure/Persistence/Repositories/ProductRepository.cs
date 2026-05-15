@@ -35,4 +35,9 @@ public class ProductRepository(AppDbContext context) : IProductRepository
     {
         return await context.Products.FindAsync(id);
     }
+
+    public async Task SaveChangesAsync()
+    {
+        await context.SaveChangesAsync();
+    }
 }

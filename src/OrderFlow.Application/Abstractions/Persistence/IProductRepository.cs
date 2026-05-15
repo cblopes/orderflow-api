@@ -8,4 +8,5 @@ public interface IProductRepository
     Task CreateAsync(Product product);
     Task<Product?> GetByIdAsync(Guid id);
     Task<IEnumerable<ProductDto>> GetAsync(bool? isAvailable);
+    Task SaveChangesAsync();
 }
