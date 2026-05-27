@@ -6,7 +6,7 @@ using OrderFlow.Application.Products.Commands.UpdateProduct;
 using OrderFlow.Application.Products.Queries.GetProductById;
 using OrderFlow.Application.Products.Queries.GetProducts;
 
-namespace OrderFlow.API.Controllers;
+namespace OrderFlow.Presentation.Controllers;
 
 [ApiController]
 [Route("api/products")]

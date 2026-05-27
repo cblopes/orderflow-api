@@ -15,7 +15,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrderFlow.Application", "sr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrderFlow.Infrastructure", "src\OrderFlow.Infrastructure\OrderFlow.Infrastructure.csproj", "{FF74AE8A-895B-40AA-823E-7234A46ECDA2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrderFlow.API", "src\OrderFlow.API\OrderFlow.API.csproj", "{CB664078-7418-44F7-A7BA-3E771104D3A9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrderFlow.Presentation", "src\OrderFlow.Presentation\OrderFlow.Presentation.csproj", "{CB664078-7418-44F7-A7BA-3E771104D3A9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
