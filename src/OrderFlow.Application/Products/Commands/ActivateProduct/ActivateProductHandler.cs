@@ -9,15 +9,15 @@ public class ActivateProductHandler(IProductRepository repository)
     {
         var product = await repository.GetByIdAsync(command.Id);
         if (product is null)
-            return Result.Failure("Product not found.");
+            return Result.Failure(ProductErrors.NotFound);
 
         try
         {
             product.Activate();
         }
-        catch (InvalidOperationException ex)
+        catch (InvalidOperationException)
         {
-            return Result.Failure(ex.Message);
+            return Result.Failure(ProductErrors.AlreadyActive);
         }
 
         await repository.SaveChangesAsync();

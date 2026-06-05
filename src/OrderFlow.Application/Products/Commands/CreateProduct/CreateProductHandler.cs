@@ -18,9 +18,9 @@ public class CreateProductHandler(IProductRepository repository)
                 command.Description,
                 command.ImageUrl);
         }
-        catch (ArgumentException ex)
+        catch (ArgumentException)
         {
-            return Result<Guid>.Failure(ex.Message);
+            return Result<Guid>.Failure(ProductErrors.InvalidData);
         }
 
         await repository.CreateAsync(product);

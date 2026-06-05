@@ -9,7 +9,7 @@ public class UpdateProductHandler(IProductRepository repository)
     {
         var product = await repository.GetByIdAsync(command.Id);
         if (product is null)
-            return Result.Failure("Product not found.");
+            return Result.Failure(ProductErrors.NotFound);
 
         try
         {
@@ -20,9 +20,9 @@ public class UpdateProductHandler(IProductRepository repository)
                 command.ImageUrl
             );
         }
-        catch (ArgumentException ex)
+        catch (ArgumentException)
         {
-            return Result.Failure(ex.Message);
+            return Result.Failure(ProductErrors.InvalidData);
         }
 
         await repository.SaveChangesAsync();

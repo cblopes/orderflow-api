@@ -10,7 +10,7 @@ public class GetProductByIdHandler(IProductRepository repository)
         var product = await repository.GetByIdAsync(query.Id);
 
         if (product is null)
-            return Result<ProductDto>.Failure("Product not found.");
+            return Result<ProductDto>.Failure(ProductErrors.NotFound);
 
         var dto = new ProductDto(
             product.Id,

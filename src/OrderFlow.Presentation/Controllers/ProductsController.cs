@@ -1,16 +1,18 @@
 using Microsoft.AspNetCore.Mvc;
+using OrderFlow.Application.Abstractions.Common;
+using OrderFlow.Application.Products;
 using OrderFlow.Application.Products.Commands.ActivateProduct;
 using OrderFlow.Application.Products.Commands.CreateProduct;
 using OrderFlow.Application.Products.Commands.DeactivateProduct;
 using OrderFlow.Application.Products.Commands.UpdateProduct;
 using OrderFlow.Application.Products.Queries.GetProductById;
 using OrderFlow.Application.Products.Queries.GetProducts;
+using OrderFlow.Presentation.Controllers.Base;
 
 namespace OrderFlow.Presentation.Controllers;
 
-[ApiController]
 [Route("api/products")]
-public class ProductsController() : ControllerBase
+public class ProductsController() : ApiControllerBase
 {
     [HttpPost]
     public async Task<IActionResult> Create(
@@ -19,13 +21,15 @@ public class ProductsController() : ControllerBase
     {
         var result = await handler.HandleAsync(command);
 
-        if (!result.IsSuccess)
-            return BadRequest(result.Error);
+        if (result.IsSuccess)
+        {
+            return CreatedResponse(
+                nameof(GetById),
+                new { id = result.Value },
+                result.Value);
+        }
 
-        return CreatedAtAction(
-            nameof(GetById),
-            new { id = result.Value },
-            result.Value);
+        return HandleFailure(result.Error);
     }
 
     [HttpGet]
@@ -34,12 +38,14 @@ public class ProductsController() : ControllerBase
         [FromQuery] bool? isAvailable)
     {
         var query = new GetProductsQuery(isAvailable);
-
         var result = await handler.HandleAsync(query);
-        if (!result.IsSuccess)
-            return BadRequest(result.Error);
 
-        return Ok(result.Value);
+        if (result.IsSuccess)
+        {
+            return OkResponse(result.Value);
+        }
+
+        return HandleFailure(result.Error);
     }
 
     [HttpGet("{id:guid}")]
@@ -48,13 +54,14 @@ public class ProductsController() : ControllerBase
         [FromRoute] Guid id)
     {
         var query = new GetProductByIdQuery(id);
-
         var result = await handler.HandleAsync(query);
 
-        if (!result.IsSuccess)
-            return NotFound(result.Error);
+        if (result.IsSuccess)
+        {
+            return OkResponse(result.Value);
+        }
 
-        return Ok(result.Value);
+        return HandleFailure(result.Error);
     }
 
     [HttpPut("{id:guid}")]
@@ -66,10 +73,12 @@ public class ProductsController() : ControllerBase
         command.Id = id;
         var result = await handler.HandleAsync(command);
 
-        if (!result.IsSuccess)
-            return BadRequest(result.Error);
+        if (result.IsSuccess)
+        {
+            return NoContentResponse();
+        }
 
-        return NoContent();
+        return HandleFailure(result.Error);
     }
 
     [HttpPatch("{id:guid}/activate")]
@@ -80,10 +89,12 @@ public class ProductsController() : ControllerBase
         var command = new ActivateProductCommand(id);
         var result = await handler.HandleAsync(command);
 
-        if (!result.IsSuccess)
-            return BadRequest(result.Error);
+        if (result.IsSuccess)
+        {
+            return NoContentResponse();
+        }
 
-        return NoContent();
+        return HandleFailure(result.Error);
     }
 
     [HttpPatch("{id:guid}/deactivate")]
@@ -94,9 +105,25 @@ public class ProductsController() : ControllerBase
         var command = new DeactivateProductCommand(id);
         var result = await handler.HandleAsync(command);
 
-        if (!result.IsSuccess)
-            return BadRequest(result.Error);
+        if (result.IsSuccess)
+        {
+            return NoContentResponse();
+        }
 
-        return NoContent();
+        return HandleFailure(result.Error);
+    }
+
+    private IActionResult HandleFailure(Error? error)
+    {
+        if (error == ProductErrors.NotFound)
+            return NotFoundResponse(error);
+
+        if (error == ProductErrors.InvalidData)
+            return BadRequestResponse(error);
+
+        if (error == ProductErrors.AlreadyActive || error == ProductErrors.AlreadyInactive)
+            return BadRequestResponse(error);
+
+        return UnknownErrorResponse();
     }
 }
