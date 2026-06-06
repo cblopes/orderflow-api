@@ -6,8 +6,17 @@ public static class ServiceCollectionExtensions
         this IServiceCollection services)
     {
         services.AddControllers();
+
         services.AddEndpointsApiExplorer();
+
+        services.AddApiVersioningConfiguration();
+
         services.AddSwaggerDocumentation();
+
+        services.Configure<RouteOptions>(options =>
+        {
+            options.LowercaseUrls = true;
+        });
 
         return services;
     }

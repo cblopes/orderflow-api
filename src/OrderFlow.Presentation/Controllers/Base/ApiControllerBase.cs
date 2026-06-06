@@ -5,6 +5,7 @@ using OrderFlow.Presentation.Common.Responses;
 namespace OrderFlow.Presentation.Controllers.Base;
 
 [ApiController]
+[Route("api/v{version:apiVersion}/[controller]")]
 public abstract class ApiControllerBase : ControllerBase
 {
     protected IActionResult OkResponse<T>(T data)

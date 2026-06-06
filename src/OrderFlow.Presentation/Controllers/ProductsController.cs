@@ -1,3 +1,4 @@
+using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;
 using OrderFlow.Application.Abstractions.Common;
 using OrderFlow.Application.Products;
@@ -11,8 +12,7 @@ using OrderFlow.Presentation.Controllers.Base;
 
 namespace OrderFlow.Presentation.Controllers;
 
-[Route("api/products")]
-public class ProductsController() : ApiControllerBase
+public class ProductsController : ApiControllerBase
 {
     [HttpPost]
     public async Task<IActionResult> Create(
