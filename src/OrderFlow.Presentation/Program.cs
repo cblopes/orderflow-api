@@ -1,45 +1,20 @@
-using Microsoft.EntityFrameworkCore;
-using OrderFlow.Application.Abstractions.Persistence;
-using OrderFlow.Application.Products.Commands.ActivateProduct;
-using OrderFlow.Application.Products.Commands.CreateProduct;
-using OrderFlow.Application.Products.Commands.DeactivateProduct;
-using OrderFlow.Application.Products.Commands.UpdateProduct;
-using OrderFlow.Application.Products.Queries.GetProductById;
-using OrderFlow.Application.Products.Queries.GetProducts;
-using OrderFlow.Infrastructure.Persistence;
-using OrderFlow.Infrastructure.Persistence.Repositories;
+using OrderFlow.Application.Extensions;
+using OrderFlow.Infrastructure.Extensions;
+using OrderFlow.Presentation.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllers();
+builder.Services.AddPresentation();
 
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddApplication();
 
-builder.Services.AddDbContext<AppDbContext>(options =>
-{
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"));
-});
-
-builder.Services.AddScoped<CreateProductHandler>();
-builder.Services.AddScoped<UpdateProductHandler>();
-builder.Services.AddScoped<GetProductsHandler>();
-builder.Services.AddScoped<GetProductByIdHandler>();
-builder.Services.AddScoped<ActivateProductHandler>();
-builder.Services.AddScoped<DeactivateProductHandler>();
-builder.Services.AddScoped<IProductRepository, ProductRepository>();
+builder.Services.AddInfrastructure(builder.Configuration);
 
 var app = builder.Build();
 
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+app.UsePresentation();
 
 app.UseHttpsRedirection();
-
-app.UseAuthorization();
 
 app.MapControllers();
 
