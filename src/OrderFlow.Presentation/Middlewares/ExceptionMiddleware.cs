@@ -1,5 +1,5 @@
 using OrderFlow.Application.Abstractions.Common;
-using OrderFlow.Presentation.Common.Responses;
+using OrderFlow.Presentation.Contracts.Responses;
 
 namespace OrderFlow.Presentation.Middlewares;
 

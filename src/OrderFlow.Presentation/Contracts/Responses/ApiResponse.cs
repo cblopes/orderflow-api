@@ -1,6 +1,6 @@
 using OrderFlow.Application.Abstractions.Common;
 
-namespace OrderFlow.Presentation.Common.Responses;
+namespace OrderFlow.Presentation.Contracts.Responses;
 
 public class ApiResponse<T>
 {

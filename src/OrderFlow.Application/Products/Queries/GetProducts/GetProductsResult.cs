@@ -1,6 +1,6 @@
 namespace OrderFlow.Application.Products.Queries.GetProducts;
 
-public record class ProductDto(
+public sealed record GetProductsResult(
     Guid Id,
     string Name,
     decimal Price,

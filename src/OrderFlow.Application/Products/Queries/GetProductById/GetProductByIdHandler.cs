@@ -5,14 +5,14 @@ namespace OrderFlow.Application.Products.Queries.GetProductById;
 
 public class GetProductByIdHandler(IProductRepository repository)
 {
-    public async Task<Result<ProductDto>> HandleAsync(GetProductByIdQuery query)
+    public async Task<Result<GetProductByIdResult>> HandleAsync(GetProductByIdQuery query)
     {
         var product = await repository.GetByIdAsync(query.Id);
 
         if (product is null)
-            return Result<ProductDto>.Failure(ProductErrors.NotFound);
+            return Result<GetProductByIdResult>.Failure(ProductErrors.NotFound);
 
-        var dto = new ProductDto(
+        var dto = new GetProductByIdResult(
             product.Id,
             product.Name,
             product.Description,
@@ -21,6 +21,6 @@ public class GetProductByIdHandler(IProductRepository repository)
             product.IsAvailable
         );
 
-        return Result<ProductDto>.Success(dto);
+        return Result<GetProductByIdResult>.Success(dto);
     }
 }

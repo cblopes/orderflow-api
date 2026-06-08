@@ -5,6 +5,6 @@ namespace OrderFlow.Application.Products.Queries.GetProducts;
 
 public class GetProductsHandler(IProductRepository repository)
 {
-    public async Task<Result<IEnumerable<ProductDto>>> HandleAsync(GetProductsQuery query)
-        => Result<IEnumerable<ProductDto>>.Success(await repository.GetAsync(query.IsAvailable));
+    public async Task<Result<IEnumerable<GetProductsResult>>> HandleAsync(GetProductsQuery query)
+        => Result<IEnumerable<GetProductsResult>>.Success(await repository.GetAsync(query.IsAvailable));
 }

@@ -13,14 +13,14 @@ public class ProductRepository(AppDbContext context) : IProductRepository
         await context.SaveChangesAsync();
     }
 
-    public async Task<IEnumerable<ProductDto>> GetAsync(bool? isAvailable)
+    public async Task<IEnumerable<GetProductsResult>> GetAsync(bool? isAvailable)
     {
         var query = context.Products.AsNoTracking();
 
         if (isAvailable.HasValue)
             query = query.Where(x => x.IsAvailable == isAvailable.Value);
 
-        var result = await query.Select(x => new ProductDto(
+        var result = await query.Select(x => new GetProductsResult(
             x.Id,
             x.Name,
             x.Price,

@@ -1,4 +1,3 @@
-using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;
 using OrderFlow.Application.Abstractions.Common;
 using OrderFlow.Application.Products;
@@ -8,7 +7,9 @@ using OrderFlow.Application.Products.Commands.DeactivateProduct;
 using OrderFlow.Application.Products.Commands.UpdateProduct;
 using OrderFlow.Application.Products.Queries.GetProductById;
 using OrderFlow.Application.Products.Queries.GetProducts;
+using OrderFlow.Presentation.Contracts.Requests.Products;
 using OrderFlow.Presentation.Controllers.Base;
+using OrderFlow.Presentation.Mappings;
 
 namespace OrderFlow.Presentation.Controllers;
 
@@ -17,8 +18,9 @@ public class ProductsController : ApiControllerBase
     [HttpPost]
     public async Task<IActionResult> Create(
         [FromServices] CreateProductHandler handler,
-        [FromBody] CreateProductCommand command)
+        [FromBody] CreateProductRequest request)
     {
+        var command = request.ToCommand();
         var result = await handler.HandleAsync(command);
 
         if (result.IsSuccess)
@@ -42,7 +44,7 @@ public class ProductsController : ApiControllerBase
 
         if (result.IsSuccess)
         {
-            return OkResponse(result.Value);
+            return OkResponse(result.Value!.ToResponse());
         }
 
         return HandleFailure(result.Error);
@@ -58,7 +60,7 @@ public class ProductsController : ApiControllerBase
 
         if (result.IsSuccess)
         {
-            return OkResponse(result.Value);
+            return OkResponse(result.Value!.ToResponse());
         }
 
         return HandleFailure(result.Error);
@@ -68,9 +70,9 @@ public class ProductsController : ApiControllerBase
     public async Task<IActionResult> Update(
         [FromServices] UpdateProductHandler handler,
         [FromRoute] Guid id,
-        [FromBody] UpdateProductCommand command)
+        [FromBody] UpdateProductRequest request)
     {
-        command.Id = id;
+        var command = request.ToCommand(id);
         var result = await handler.HandleAsync(command);
 
         if (result.IsSuccess)
