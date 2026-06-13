@@ -1,3 +1,4 @@
+using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using OrderFlow.Application.Abstractions.Common;
 using OrderFlow.Application.Products;
@@ -18,8 +19,13 @@ public class ProductsController : ApiControllerBase
     [HttpPost]
     public async Task<IActionResult> Create(
         [FromServices] CreateProductHandler handler,
+        [FromServices] IValidator<CreateProductRequest> validator,
         [FromBody] CreateProductRequest request)
     {
+        var validatonResult = ValidateRequest(request, validator);
+        if (validatonResult is not null)
+            return validatonResult;
+
         var command = request.ToCommand();
         var result = await handler.HandleAsync(command);
 
@@ -69,9 +75,14 @@ public class ProductsController : ApiControllerBase
     [HttpPut("{id:guid}")]
     public async Task<IActionResult> Update(
         [FromServices] UpdateProductHandler handler,
+        [FromServices] IValidator<UpdateProductRequest> validator,
         [FromRoute] Guid id,
         [FromBody] UpdateProductRequest request)
     {
+        var validationResult = ValidateRequest(request, validator);
+        if (validationResult is not null)
+            return validationResult;
+
         var command = request.ToCommand(id);
         var result = await handler.HandleAsync(command);
 

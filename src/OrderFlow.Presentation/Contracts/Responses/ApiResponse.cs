@@ -25,4 +25,13 @@ public class ApiResponse<T>
             Errors = [error]
         };
     }
+
+    public static ApiResponse<T> FailureResponse(List<Error> errors)
+    {
+        return new()
+        {
+            Success = false,
+            Errors = [.. errors]
+        };
+    }
 }

@@ -13,6 +13,8 @@ public static class ServiceCollectionExtensions
 
         services.AddSwaggerDocumentation();
 
+        services.AddValidators();
+
         services.Configure<RouteOptions>(options =>
         {
             options.LowercaseUrls = true;

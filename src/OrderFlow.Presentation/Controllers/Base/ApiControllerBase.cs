@@ -1,3 +1,4 @@
+using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using OrderFlow.Application.Abstractions.Common;
 using OrderFlow.Presentation.Contracts.Responses;
@@ -8,6 +9,23 @@ namespace OrderFlow.Presentation.Controllers.Base;
 [Route("api/v{version:apiVersion}/[controller]")]
 public abstract class ApiControllerBase : ControllerBase
 {
+    protected IActionResult? ValidateRequest<T>(
+        T request,
+        IValidator<T> validator)
+    {
+        var result = validator.Validate(request);
+
+        if (result.IsValid)
+            return null;
+
+        var errors = result.Errors
+            .Select(x => new Error(
+                "VALIDATION_ERROR",
+                x.ErrorMessage))
+            .ToList();
+
+        return BadRequestResponse(errors);
+    }
     protected IActionResult OkResponse<T>(T data)
     {
         return Ok(ApiResponse<T>.SuccessResponse(data));
@@ -35,6 +53,12 @@ public abstract class ApiControllerBase : ControllerBase
             ApiResponse<Error>.FailureResponse(error));
     }
 
+    protected IActionResult BadRequestResponse(List<Error> errors)
+    {
+        return BadRequest(
+            ApiResponse<Error>.FailureResponse(errors));
+    }
+
     protected IActionResult NotFoundResponse(Error error)
     {
         return NotFound(
@@ -56,8 +80,10 @@ public abstract class ApiControllerBase : ControllerBase
 
     protected IActionResult UnknownErrorResponse()
     {
+        var error = new Error("UnknownError", "An unknown error occurred.");
+
         return StatusCode(
             StatusCodes.Status500InternalServerError,
-            ApiResponse<Error>.FailureResponse(new("UnknownError", "An unknown error occurred.")));
+            ApiResponse<Error>.FailureResponse(error));
     }
 }

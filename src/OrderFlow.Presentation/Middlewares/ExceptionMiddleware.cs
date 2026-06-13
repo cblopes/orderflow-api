@@ -19,8 +19,9 @@ public sealed class ExceptionMiddleware(
             context.Response.StatusCode = StatusCodes.Status500InternalServerError;
             context.Response.ContentType = "application/json";
 
-            var response =
-                ApiResponse<Error>.FailureResponse(new("UNKNOWN_ERROR", "An unknown error occurred."));
+            var error = new Error("UNKNOWN_ERROR", "An unknown error occurred.");
+
+            var response = ApiResponse<Error>.FailureResponse(error);
 
             await context.Response.WriteAsJsonAsync(response);
         }
