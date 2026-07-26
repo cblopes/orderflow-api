@@ -29,4 +29,9 @@ public sealed class Money : ValueObject
     public static implicit operator decimal(Money money) => money.Value;
 
     public static explicit operator Money(decimal value) => Create(value);
+    
+    protected override IEnumerable<object?> GetEqualityComponents()
+    {
+        yield return Value;
+    }
 }
