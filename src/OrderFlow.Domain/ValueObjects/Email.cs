@@ -56,11 +56,16 @@ public sealed partial class Email : ValueObject
         return true;
     }
 
-    private static bool IsValid(string email) => EmailRegex.IsMatch(email);
+    public static bool IsValid(string? email) => email is not null && EmailRegex.IsMatch(email);
 
     public override string ToString() => Value;
 
     public static implicit operator string(Email email) => email.Value;
+
+    protected override IEnumerable<object?> GetEqualityComponents()
+    {
+        yield return Value;
+    }
 
     [GeneratedRegex(@"^[\w\.+-]+@[\w-]+(\.[\w-]+)+$", RegexOptions.Compiled)]
     private static partial Regex EmailPatternRegex();
